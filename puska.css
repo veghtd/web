@@ -1,0 +1,283 @@
+--------------------------------------------------------------------------------------------------------------
+/* Táblázat körvonala */
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+
+header {
+    background-image: url("logo.jpg"); /* Háttérképet tesz a fejlécbe */
+    background-size: cover; /* A kép kitölti a fejlécet, de a széleiből levághat */
+    height: 300px; /* A fejléc magassága 300 pixel lesz */
+}
+----------------------------------------------------------------------------------------------------------------
+/* HTML-ELEMEK KIVÁLASZTÁSA */
+p { }              /* Minden p elem */
+h1 { }             /* Minden h1 címsor */
+header { }         /* Minden header elem */
+footer { }         /* Minden footer elem */
+header p { }       /* Csak a headeren belüli p elemek */
+header img { }     /* Csak a headeren belüli képek */
+p, h1, h3 { }      /* Minden p, h1 és h3 elem */
+.w5 { }            /* Minden w5 osztályú elem */
+#menu { }          /* A menu azonosítójú elem */
+* { }              /* Az összes HTML-elem */
+
+HTML-ben az osztály és az azonosító például:
+<p class="w5">Szöveg</p>
+<div id="menu">Menü</div>
+Fontos:
+. = class, azaz osztály
+# = id, azaz egyedi azonosító.
+A szóköz a CSS-ben azt jelenti, hogy egy másik elem belsejében keressük az elemet.
+-------------------------------------------------------------------------------------------------------------------
+/* SZÍNEK */
+color: red;                       /* Szöveg színe */
+background-color: yellow;         /* Háttér színe */
+color: white;                     /* Fehér szöveg */
+color: black;                     /* Fekete szöveg */
+background-color: #00A67E;        /* Szín HEX-kóddal */
+background-color: rgb(0, 166, 126); /* Szín RGB-kóddal */
+--------------------------------------------------------------------------------------------------------------------
+/* SZÉLESSÉG ÉS MAGASSÁG */
+width: 100%;       /* A szülőelem szélességének 100%-a */
+width: 80%;        /* A szülőelem szélességének 80%-a */
+width: 50%;        /* A szülőelem szélességének fele */
+width: 25%;        /* A szülőelem szélességének negyede */
+width: 300px;      /* 300 pixel szélesség */
+height: 300px;     /* 300 pixel magasság */
+min-width: 200px;  /* Legalább 200 pixel széles */
+max-width: 1000px; /* Legfeljebb 1000 pixel széles */
+
+% = a szülőelem méretéhez viszonyít.
+px = pixel.
+height = magasság.
+width = szélesség.
+----------------------------------------------------------------------------------------------------------------------
+/* MARGIN ÉS PADDING */
+margin: 0;                 /* Nincs külső térköz */
+margin: 10px;              /* Minden oldalon 10 px külső térköz */
+margin: 10px 20px;         /* Felül/alul 10 px, balra/jobbra 20 px */
+margin-top: 10px;          /* Felső külső térköz */
+margin-bottom: 10px;       /* Alsó külső térköz */
+margin-left: 10px;         /* Bal oldali külső térköz */
+margin-right: 10px;        /* Jobb oldali külső térköz */
+
+padding: 10px;             /* Minden oldalon 10 px belső térköz */
+padding-top: 20px;         /* Felső belső térköz */
+padding-bottom: 20px;      /* Alsó belső térköz */
+padding-left: 10px;        /* Bal oldali belső térköz */
+padding-right: 10px;       /* Jobb oldali belső térköz */
+
+margin: 0 auto;            /* Vízszintesen középre helyezhet egy elemet */
+
+margin = az elem KÜLSŐ térköze.
+padding = az elem BELSŐ térköze.
+A margin: 0 auto; középre igazításhoz általában meghatározott szélességű elemnél használható.
+------------------------------------------------------------------------------------------------------------------------
+/* SZÖVEG ÉS BETŰTÍPUS */
+color: white;               /* Szöveg színe */
+font-size: 20px;            /* Betűméret */
+font-size: 20pt;            /* Betűméret pontban */
+font-family: Arial;         /* Betűtípus */
+font-family: sans-serif;    /* Talpatlan betűtípus */
+font-weight: bold;          /* Félkövér szöveg */
+font-style: italic;         /* Dőlt szöveg */
+text-align: left;           /* Balra igazítás */
+text-align: center;         /* Középre igazítás */
+text-align: right;          /* Jobbra igazítás */
+text-align: justify;        /* Sorkizárt szöveg */
+text-decoration: none;      /* Aláhúzás és egyéb díszítés eltávolítása */
+text-decoration: underline; /* Aláhúzás */
+text-transform: uppercase;  /* Minden betű nagybetű */
+line-height: 1.5;           /* Sorköz */
+--------------------------------------------------------------------------------------------------------------------------
+/* KERETEZÉS */
+border: 1px solid black;    /* 1 px vastag, folytonos fekete keret */
+border: 2px dashed red;     /* 2 px vastag, szaggatott piros keret */
+border-radius: 10px;        /* Lekerekített sarkok */
+border-top: 1px solid black; /* Csak felső keret */
+border-bottom: 1px solid black; /* Csak alsó keret */
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse; /* A szomszédos keretek összevonása */
+}
+---------------------------------------------------------------------------------------------------------------------------
+/* HÁTTÉRKÉP */
+background-image: url("kep.jpg"); /* Háttérkép beállítása */
+background-size: cover;           /* Kitölti a területet, a kép vágható */
+background-size: contain;          /* A teljes kép látszik, maradhat üres rész */
+background-position: center;       /* A háttérkép középre kerül */
+background-repeat: no-repeat;      /* Nem ismétli a képet */
+background-repeat: repeat;         /* Ismétli a képet */
+
+Példa fejléc háttérképére:
+header {
+    background-image: url("logo.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 300px;
+}
+----------------------------------------------------------------------------------------------------------------------------
+/* KÉPEK */
+Vízszintesen középre            display: block; margin: 0 auto;
+Bal felső sarokba	            position: absolute; top: 0; left: 0;
+Jobb felső sarokba	            position: absolute; top: 0; right: 0;
+Pontos helyzet beállítása	    position: absolute; top: 20px; left: 30px;
+Konténer közepére	            display: flex; justify-content: center; align-items: center;
+------------------------------------------------------------------------------------------------------------------------------
+/* ELEMELRENDEZÉS */
+display: block;         /* Új sorban jelenik meg, általában teljes szélességet foglal */
+display: inline;        /* A szöveg részeként, soron belül jelenik meg */
+display: inline-block;  /* Soron belüli elem, méret is beállítható */
+display: none;          /* Elrejti az elemet */
+float: left;            /* Balra úsztatja az elemet */
+float: right;           /* Jobbra úsztatja az elemet */
+clear: both;            /* Megakadályozza, hogy az elem float mellé kerüljön */
+overflow: auto;         /* Szükség esetén görgetést biztosít, a floatot is körbefoghatja */
+
+Flexbox – elemek elrendezése:
+.container {
+    display: flex;              /* Flex elrendezés */
+    justify-content: center;     /* Vízszintes középre igazítás */
+    align-items: center;         /* Keresztirányú középre igazítás */
+    gap: 10px;                   /* 10 px távolság az elemek között */
+    flex-wrap: wrap;              /* A következő sorba törhetnek az elemek */
+}
+-------------------------------------------------------------------------------------------------------------------------------
+/* POZICIONÁLÁS */
+position: static;    /* Alapértelmezett elhelyezés */
+position: relative;  /* Az eredeti helyéhez képest mozgatható */
+position: absolute;  /* Egy megfelelő pozicionált szülőhöz igazodik */
+position: fixed;     /* A böngészőablakhoz rögzül */
+position: sticky;    /* Görgetéskor bizonyos ponton odatapadhat */
+
+top: 0;              /* Felső pozíció */
+bottom: 0;           /* Alsó pozíció */
+left: 0;             /* Bal oldali pozíció */
+right: 0;            /* Jobb oldali pozíció */
+---------------------------------------------------------------------------------------------------------------------------------
+/* TÁBLÁZATOK */
+table {
+    width: 100%;                 /* Teljes szélesség */
+    border-collapse: collapse;   /* Összevont keretek */
+}
+
+th {
+    background-color: lightgreen; /* Fejléccellák háttere */
+    text-align: center;           /* Fejléc szövegének középre igazítása */
+}
+
+td {
+    padding: 10px;                /* Belső térköz az adatcellákban */
+}
+
+tr:nth-child(even) {
+    background-color: lightgray;  /* Páros sorok színe */
+}
+
+tr:nth-child(odd) {
+    background-color: white;      /* Páratlan sorok színe */
+}
+
+
+table = a teljes táblázat
+tr = egy táblázatsor
+th = fejléc cellája
+td = normál adatcella
+--------------------------------------------------------------------------------------------------------------------------------------
+/*  LISTÁK ÉS LINKek */
+a {
+    color: blue;             /* Link színe */
+    text-decoration: none;   /* Aláhúzás eltávolítása */
+}
+
+a:hover {
+    color: red;              /* Egér fölé húzásakor megváltozik a szín */
+}
+
+ul {
+    list-style-type: disc;   /* Teli kör alakú felsorolásjel */
+}
+
+ol {
+    list-style-type: decimal; /* Számozott lista */
+}
+
+li {
+    margin-bottom: 5px;      /* Távolság a listaelemek között */
+}
+----------------------------------------------------------------------------------------------------------------------------------------
+/* A LEGFONTOSABB KÜLÖNBSÉGEK */
+color = szöveg színe.
+background-color = háttér színe.
+margin = külső térköz.
+padding = belső térköz.
+width = szélesség.
+height = magasság.
+border = keret.
+text-align = szöveg igazítása.
+font-size = betűméret.
+display: none = elem elrejtése.
+display: flex = rugalmas elrendezés.
+float: left = balra úsztatás.
+.nev = osztály kiválasztása.
+#nev = azonosító kiválasztása.
+:hover = egérmutató az elem felett.
+@media = képernyőmérettől függő szabály.
+background-size: cover = a háttérkép kitölti a területet, de levághat belőle.
+object-fit: cover = egy kép kitölti a saját területét, de levághat belőle.
+-----------------------------------------------------------------------------------------------------------------------------------------
+/* HTML – GYAKORI PARANCSOK */
+<br> – sortörés, új sorba ugrás
+<hr> – vízszintes elválasztó vonal
+<p> – új bekezdés
+<h1> – legnagyobb címsor
+<h2> – második szintű címsor
+<h3> – harmadik szintű címsor
+<b> – félkövér szöveg
+<strong> – fontos szöveg, általában félkövér
+<i> – dőlt szöveg
+<em> – kiemelt szöveg, általában dőlt
+<u> – aláhúzott szöveg
+<img> – kép beszúrása
+<a> – hivatkozás létrehozása
+<ul> – felsorolás
+<ol> – számozott lista
+<li> – listaelem
+<table> – táblázat
+<tr> – táblázatsor
+<th> – fejléc cellája
+<td> – normál táblázatcella
+<div> – általános blokk, elemek csoportosítására
+<span> – szövegrész kijelölése, általában soron belül
+<header> – oldal vagy szakasz fejléce
+<nav> – navigációs menü
+<main> – az oldal fő tartalma
+<section> – tartalmi szakasz
+<article> – önálló tartalmi egység
+<aside> – kiegészítő tartalom
+<footer> – lábléc
+<form> – űrlap
+<input> – adatbeviteli mező
+<button> – gomb
+<title> – az oldal címe a böngésző fülén
+<link> – külső fájl, például CSS csatolása
+<meta> – oldaladatok megadása
+
+Gyakori attribútumok:
+href="..." – a hivatkozás célja
+src="..." – kép vagy más fájl helye
+alt="..." – a kép szöveges leírása
+width="..." – szélesség
+height="..." – magasság
+class="..." – CSS-osztály hozzárendelése
+id="..." – egyedi azonosító
+style="..." – közvetlen CSS megadása
+target="_blank" – hivatkozás megnyitása új lapon
+
+Fontos:
+A <br> sort tör.
+A <hr> vízszintes vonalat rajzol.
+A legtöbb HTML-elemet le kell zárni, például </p>.
+A <br> és a <hr> elemeket nem kell külön lezárni.
