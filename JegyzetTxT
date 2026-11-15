@@ -1,0 +1,1197 @@
+# 📚 HTML + CSS + JavaScript Jegyzet
+
+**Contents**
+
+1.  [The basics (read this first)](#0-the-basics-read-this-first)
+2.  [How style.css works](#1-how-stylecss-works)
+3.  [Put a box in the middle of the screen](#2-put-a-box-in-the-middle-of-the-screen)
+4.  [Move content inside the box](#3-move-content-inside-the-box)
+5.  [Put an image in the box](#4-put-an-image-in-the-box)
+6.  [Track the mouse on it](#5-track-the-mouse-on-it)
+7.  [The ruler: mouse goes 1 → 100, click = guess](#6-the-ruler-mouse-goes-1--100-number-at-bottom-middle-click--guess)
+8.  [Form elements (reading inputs)](#7-form-elements-űrlapelemek)
+9.  [⭐ Multiplication table (Szorzótábla)](#8--multiplication-table-szorzótábla)
+10. [⭐ Guessing game (Számkitaláló)](#9--guessing-game-számkitaláló--with-the-ruler)
+11. [⭐ Currency exchange (Pénzváltó)](#10--currency-exchange-pénzváltó)
+12. [Math + JS quick reference](#11-math--js-quick-reference)
+13. ["It doesn't work!" checklist](#12-it-doesnt-work-checklist)
+
+
+## 0. The basics (read this first)
+
+> **In plain words, a web page has 3 parts:**  
+> 🧱 **HTML** = WHAT is on the page (boxes, buttons, text, images)  
+> 🎨 **CSS** = HOW it looks (colors, size, position)  
+> ⚙️ **JavaScript** = WHAT HAPPENS when you click, type, or move the mouse
+
+### The skeleton – start EVERY task with this
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Feladat</title>
+  <link rel="stylesheet" href="style.css">   <!-- only if you have a style.css file -->
+  <style>
+    /* OR write CSS here */
+  </style>
+</head>
+<body>
+
+  <!-- HTML (the visible stuff) goes here -->
+
+  <script>
+    // JavaScript goes here, AT THE BOTTOM of body
+  </script>
+</body>
+</html>
+```
+
+### The 5 golden rules of JavaScript
+
+| \#  | Rule                                                  | Code                                                 |
+|-----|-------------------------------------------------------|------------------------------------------------------|
+| 1   | Anything JS needs to touch gets an **id**             | `<input id="tipp">`                                  |
+| 2   | **READ** what the user typed                          | `document.getElementById("tipp").value`              |
+| 3   | **WRITE** text onto the page                          | `document.getElementById("ki").innerHTML = "Hello";` |
+| 4   | Inputs always give you TEXT, so turn it into a number | `Number(document.getElementById("tipp").value)`      |
+| 5   | A button runs a function                              | `<button onclick="tippel()">Tippel</button>`         |
+
+> 💡 **Shortcut your teacher uses:** if an element has `id="tipp"`, you can just write `tipp.value` instead of `document.getElementById("tipp").value`. Both work. The long version is safer.
+
+> 💡 **Press F12 → Console** in the browser. Red text there = your error and the line number.
+
+## 1. How style.css works
+
+### Connecting style.css to your HTML
+
+Put this line inside `<head>`. The file `style.css` must be in the **same folder** as the .html file.
+
+```html
+<link rel="stylesheet" href="style.css">
+```
+
+> ⚠️ Inside **style.css** you write ONLY CSS. No `<style>` tags, no HTML.
+
+### How one CSS rule looks
+
+```css
+selector {
+  property: value;
+  property: value;
+}
+
+/* example: */
+h1 {
+  color: red;
+  font-size: 30px;
+}
+```
+
+In plain words: "find these elements, then give them these looks." Every line ends with **;** and the rule is wrapped in **{ }**.
+
+### Selectors – WHO gets styled
+
+| CSS                | Picks                                       | HTML it matches                  |
+|--------------------|---------------------------------------------|----------------------------------|
+| `p { }`            | every \<p\> tag                             | `<p>Hi</p>`                      |
+| `.doboz { }`       | everything with class="doboz" (dot = class) | `<div class="doboz">`            |
+| `#ki { }`          | the ONE element with id="ki" (hashtag = id) | `<p id="ki">`                    |
+| `.doboz img { }`   | images INSIDE a .doboz                      | `<div class="doboz"><img></div>` |
+| `h1, h2 { }`       | both h1 and h2                              |                                  |
+| `button:hover { }` | button WHILE the mouse is over it           |                                  |
+| `tr:hover td { }`  | cells of the row under the mouse            |                                  |
+
+> 💡 Strength order when rules fight: **\#id** beats **.class**, and **.class** beats **tag**. If two rules are equally strong, the one written LOWER in the file wins.
+
+### The box model – every element is a box
+
+```text
++---------------- margin (space OUTSIDE the border) ----------------+
+|   +------------------- border (the line) ---------------------+   |
+|   |   +------------ padding (space INSIDE) ---------------+   |   |
+|   |   |                                                    |   |   |
+|   |   |              CONTENT (width x height)              |   |   |
+|   |   |                                                    |   |   |
+|   |   +----------------------------------------------------+   |   |
+|   +------------------------------------------------------------+   |
++--------------------------------------------------------------------+
+```
+
+```css
+.doboz {
+  width: 400px;              /* how wide */
+  height: 300px;             /* how tall */
+  padding: 20px;             /* push content away from the edge (inside) */
+  border: 2px solid black;   /* thickness  style  color */
+  margin: 30px;              /* push OTHER things away (outside) */
+  border-radius: 10px;       /* rounded corners */
+  box-sizing: border-box;    /* padding + border count INSIDE the width (easier math) */
+}
+
+/* margin/padding shortcuts: */
+margin: 10px;               /* all 4 sides */
+margin: 10px 20px;          /* top+bottom 10, left+right 20 */
+margin: 0 auto;             /* top+bottom 0, left+right AUTOMATIC = horizontally centered */
+margin-top: 10px;           /* only one side (also -bottom, -left, -right) */
+```
+
+### Most important properties
+
+| Property           | What it does                          | Example                                                                                |
+|--------------------|---------------------------------------|----------------------------------------------------------------------------------------|
+| `color`            | text color                            | `color: red;` / `#ff0000` / `rgb(255,0,0)`                                             |
+| `background-color` | background color                      | `background-color: lightblue;`                                                         |
+| `background-image` | image as background                   | `background-image: url("kep.jpg");`                                                    |
+| `font-size`        | text size                             | `font-size: 20px;`                                                                     |
+| `font-family`      | font                                  | `font-family: Arial, sans-serif;`                                                      |
+| `font-weight`      | bold                                  | `font-weight: bold;`                                                                   |
+| `text-align`       | text left/center/right INSIDE its box | `text-align: center;`                                                                  |
+| `display`          | how it behaves                        | `block` (own line), `inline` (in the text), `flex` (arrange children), `none` (hidden) |
+| `position`         | exact placement                       | `relative` / `absolute` (see section 3)                                                |
+| `cursor`           | mouse pointer look                    | `pointer` (hand), `crosshair` (+)                                                      |
+| `border-collapse`  | table: single lines instead of double | `border-collapse: collapse;`                                                           |
+| `box-shadow`       | shadow                                | `box-shadow: 0 2px 8px gray;`                                                          |
+
+### Units
+
+|             |                                                                    |
+|-------------|--------------------------------------------------------------------|
+| `px`        | pixels (fixed size). Use this when unsure.                         |
+| `%`         | percent of the parent box                                          |
+| `vh` / `vw` | percent of the SCREEN height / width. `100vh` = full screen height |
+
+## 2. Put a box in the middle of the screen
+
+> In plain words: make the **body** as tall as the screen, then tell it to **center its children** both ways.
+
+**Full working file**
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Doboz középen</title>
+<style>
+  body {
+    margin: 0;                  /* remove the default white border around the page */
+    height: 100vh;              /* body = full screen height */
+    display: flex;              /* turn on "arrange my children" mode */
+    justify-content: center;    /* children to the middle LEFT-RIGHT */
+    align-items: center;        /* children to the middle UP-DOWN */
+    background-color: #dfe6f5;
+  }
+
+  .doboz {
+    width: 500px;
+    height: 300px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+  <div class="doboz">
+    I am the box
+  </div>
+
+</body>
+</html>
+```
+
+> 💡 **Only left-right centering** (box stays at the top): forget flex and just give the box `margin: 50px auto;`
+
+> ⚠️ Vertical centering not working? You forgot `height: 100vh;` on body. Without it, body is only as tall as its content, so there is nothing to center in.
+
+## 3. Move content inside the box
+
+### Way A – Center text: `text-align`
+
+```css
+.doboz {
+  text-align: center;   /* left | center | right   (works on text, inputs, buttons, images) */
+}
+```
+
+### Way B – Flex (easiest for "put it in the middle / corner")
+
+Put `display: flex` on the **BOX** (the parent). Then two properties move what is inside:
+
+| Property          | Direction      | Values                                                                             |
+|-------------------|----------------|------------------------------------------------------------------------------------|
+| `justify-content` | ↔ LEFT-RIGHT   | `flex-start` (left), `center`, `flex-end` (right), `space-between`, `space-around` |
+| `align-items`     | ↕ UP-DOWN      | `flex-start` (top), `center`, `flex-end` (bottom)                                  |
+| `flex-direction`  | stack children | `row` (next to each other, default), `column` (under each other)                   |
+
+> 💡 Memory trick: **J**ustify = the **J**umping direction (sideways ↔). **A**lign = the other one (↕).  
+> ⚠️ With `flex-direction: column` the two SWAP: justify becomes ↕ and align becomes ↔.
+
+```css
+.doboz {
+  width: 500px;
+  height: 300px;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;     /* items under each other (title, input, button...) */
+  justify-content: center;    /* (because column) middle UP-DOWN */
+  align-items: center;        /* (because column) middle LEFT-RIGHT */
+  gap: 10px;                  /* space between the items */
+}
+```
+
+### Way C – padding: push content away from the edges
+
+```css
+.doboz { padding: 20px; }        /* everything inside moves 20px away from the border */
+.doboz { padding-left: 50px; }   /* only from the left */
+```
+
+### Way D – position: absolute (put ONE thing at an EXACT spot, e.g. bottom middle)
+
+> In plain words: the **box** gets `position: relative` ("I'm the frame"). The **thing** gets `position: absolute` ("place me inside the frame by distance from its edges").
+
+```css
+.doboz {
+  position: relative;          /* THE FRAME. Without this, absolute uses the whole page! */
+}
+
+#szam {
+  position: absolute;
+  bottom: 10px;                /* 10px from the bottom of the box */
+  left: 50%;                   /* its LEFT EDGE goes to the middle... */
+  transform: translateX(-50%); /* ...then shift it back by half its own width = truly centered */
+}
+
+/* other spots: */
+/* top right corner:  top: 10px;    right: 10px;  */
+/* bottom left:       bottom: 10px; left: 10px;   */
+/* top middle:        top: 10px; left: 50%; transform: translateX(-50%); */
+```
+
+## 4. Put an image in the box
+
+```html
+<!-- HTML -->
+<div class="doboz">
+  <img src="kep.jpg" alt="kép" id="kep">
+</div>
+```
+
+```css
+/* CSS */
+.doboz {
+  width: 400px;
+  height: 250px;
+  border: 2px solid black;
+  overflow: hidden;            /* cut off anything that sticks out */
+}
+
+.doboz img {
+  width: 100%;                 /* image as wide as the box */
+  height: 100%;                /* and as tall */
+  object-fit: cover;           /* fill the box without squishing (crops a bit) */
+  display: block;              /* removes a tiny gap under images */
+}
+
+/* or a simple fixed size: */
+#kep { width: 200px; }         /* height adjusts automatically */
+```
+
+> ⚠️ **Image not showing?**  
+> 1. The file must be in the **same folder** as the .html (or write the path: `src="kepek/kep.jpg"`).  
+> 2. The name must match EXACTLY, including capitals: `Kep.JPG` ≠ `kep.jpg` (GitHub cares about this!).  
+> 3. Or use an online image: `src="https://...something.jpg"`
+
+## 5. Track the mouse on it
+
+> In plain words: `onmousemove` runs your function **every time the mouse moves** over the element. The `event` tells you WHERE the mouse is.
+
+```html
+<!-- HTML: pass "event" into the function! -->
+<img src="kep.jpg" width="300" onmousemove="egerMozog(event)" onmouseleave="egerKimegy()">
+<p id="koord"></p>
+
+<script>
+function egerMozog(event) {
+  let x = event.offsetX;   // X position INSIDE the image (0 = left edge)
+  let y = event.offsetY;   // Y position INSIDE the image (0 = top edge)
+  document.getElementById("koord").innerHTML = "X: " + x + "  Y: " + y;
+}
+
+function egerKimegy() {
+  document.getElementById("koord").innerHTML = "The mouse left the image";
+}
+</script>
+```
+
+### Which X/Y do I use?
+
+| Property                  | Measured from                                 | Use it when                                          |
+|---------------------------|-----------------------------------------------|------------------------------------------------------|
+| `event.offsetX / offsetY` | top-left corner of the ELEMENT                | "where am I on the image/box?" ← **most exam tasks** |
+| `event.clientX / clientY` | top-left corner of the browser WINDOW         | "where am I on the screen?"                          |
+| `event.pageX / pageY`     | top-left of the whole PAGE (counts scrolling) | long scrolling pages                                 |
+
+### All the events you might need
+
+| Event                          | Runs when...                               |
+|--------------------------------|--------------------------------------------|
+| `onclick`                      | clicked                                    |
+| `ondblclick`                   | double-clicked                             |
+| `onmousemove`                  | the mouse moves over it (fires A LOT)      |
+| `onmouseover` / `onmouseenter` | the mouse arrives on it                    |
+| `onmouseout` / `onmouseleave`  | the mouse leaves it                        |
+| `onkeyup`                      | a key is released while typing in an input |
+| `onkeydown`                    | a key is pressed down                      |
+| `onchange`                     | an input/select/checkbox value changed     |
+| `oninput`                      | every single change while typing           |
+| `onload`                       | (on body) the page finished loading        |
+
+> ⚠️ **offsetX acting weird / jumping to small numbers?** The mouse is over a CHILD element (like text inside the box), so offsetX is measured from that child. Fix: give the child `pointer-events: none;` in CSS, or put the child outside the tracked element.
+
+## 6. The ruler: mouse goes 1 → 100, number at bottom middle, click = guess
+
+> **The idea in plain words:**  
+> 1. A box (`position: relative`) with a ruler image inside.  
+> 2. The ruler is e.g. 500px wide. The mouse X position on it (`offsetX`) is somewhere between 0 and 499.  
+> 3. Turn that into 1–100 with math.  
+> 4. Write the number into a label at the bottom middle of the box (`position: absolute`).  
+> 5. On click, put the number into the guess input and call the guess function.
+
+### The math (memorize this one line)
+
+```js
+let szam = Math.floor(event.offsetX / szelesseg * 100) + 1;
+```
+
+| Step                                 | Mouse at far left (offsetX = 0) | Middle (250) | Far right (499) |
+|--------------------------------------|---------------------------------|--------------|-----------------|
+| `offsetX / 500`                      | 0                               | 0.5          | 0.998           |
+| `* 100`                              | 0                               | 50           | 99.8            |
+| `Math.floor(...)` (cut off decimals) | 0                               | 50           | 99              |
+| `+ 1`                                | **1**                           | **51**       | **100**         |
+
+> 💡 **Even easier** if the ruler is EXACTLY 500px wide: 500 / 100 = 5px per number, so  
+> `let szam = Math.floor(event.offsetX / 5) + 1;`
+
+### Ruler-only version
+
+```html
+<style>
+  .doboz {
+    position: relative;        /* frame for the absolute number */
+    width: 560px;
+    height: 200px;
+    border: 2px solid black;
+    border-radius: 10px;
+  }
+  .vonalzo {
+    display: block;
+    width: 500px;              /* IMPORTANT: fixed width */
+    height: 60px;
+    margin: 20px auto;         /* centered in the box */
+    cursor: crosshair;
+  }
+  #mutato {
+    position: absolute;
+    bottom: 10px;              /* bottom ... */
+    left: 50%;                 /* ... middle */
+    transform: translateX(-50%);
+    font-size: 30px;
+    font-weight: bold;
+  }
+</style>
+
+<div class="doboz">
+  <img src="vonalzo.png" class="vonalzo" onmousemove="vonalzoMozog(event)" onclick="vonalzoKatt()">
+  <div id="mutato">-</div>
+</div>
+
+<script>
+let aktualis = 1;   // the number currently under the mouse (needed by the click too)
+
+function vonalzoMozog(event) {
+  let szelesseg = event.target.clientWidth;                     // ruler width (500)
+  aktualis = Math.floor(event.offsetX / szelesseg * 100) + 1;   // 1..100
+  if (aktualis > 100) aktualis = 100;                           // safety
+  if (aktualis < 1) aktualis = 1;
+  document.getElementById("mutato").innerHTML = aktualis;
+}
+
+function vonalzoKatt() {
+  alert("You clicked: " + aktualis);    // in the game: put it in the input + guess (see section 9)
+}
+</script>
+```
+
+> 💡 **No ruler image?** Save any ruler picture from Google as `vonalzo.png` next to your html file. **Or** skip the image and draw it with CSS: use a `<div class="vonalzo"></div>` and add this background:
+
+```css
+.vonalzo {
+  width: 500px;
+  height: 60px;
+  border: 1px solid #8a6d1c;
+  background:
+    repeating-linear-gradient(to right, #333 0 1px, transparent 1px 50px) top / 100% 32px no-repeat,  /* long line every 50px (= every 10 numbers) */
+    repeating-linear-gradient(to right, #333 0 1px, transparent 1px 5px)  top / 100% 14px no-repeat,  /* short line every 5px (= every number) */
+    #f3d27a;                                                                                          /* yellow wood color */
+}
+```
+
+## 7. Form elements (Űrlapelemek)
+
+<table class="ref">
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Element</th>
+<th>HTML</th>
+<th>READ it in JS</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Text</td>
+<td><code>&lt;input type="text" id="nev"&gt;</code></td>
+<td><code>nev.value</code></td>
+</tr>
+<tr class="even">
+<td>Number</td>
+<td><code>&lt;input type="number" id="db" value="1" min="1" max="100"&gt;</code></td>
+<td><code>Number(db.value)</code></td>
+</tr>
+<tr class="odd">
+<td>Password</td>
+<td><code>&lt;input type="password" id="jelszo"&gt;</code></td>
+<td><code>jelszo.value</code></td>
+</tr>
+<tr class="even">
+<td>Long text</td>
+<td><code>&lt;textarea id="uzenet"&gt;&lt;/textarea&gt;</code></td>
+<td><code>uzenet.value</code></td>
+</tr>
+<tr class="odd">
+<td>Checkbox (yes/no)</td>
+<td><code>&lt;input type="checkbox" id="hirlevel"&gt;</code></td>
+<td><code>hirlevel.checked</code> → <strong>true / false</strong></td>
+</tr>
+<tr class="even">
+<td>Radio (pick 1)</td>
+<td><code>&lt;input type="radio" name="nem" value="ffi"&gt;</code><br />
+<code>&lt;input type="radio" name="nem" value="no"&gt;</code><br />
+(SAME name = same group)</td>
+<td><code>document.querySelector("input[name='nem']:checked")</code><br />
+→ is <strong>null</strong> if nothing is picked, else <code>.value</code></td>
+</tr>
+<tr class="odd">
+<td>Dropdown</td>
+<td><code>&lt;select id="varos"&gt;&lt;option value="bp"&gt;Budapest&lt;/option&gt;&lt;/select&gt;</code></td>
+<td><code>varos.value</code> (the value="" of the picked option)</td>
+</tr>
+<tr class="even">
+<td>Slider</td>
+<td><code>&lt;input type="range" id="cs" min="0" max="100"&gt;</code></td>
+<td><code>Number(cs.value)</code></td>
+</tr>
+<tr class="odd">
+<td>Color</td>
+<td><code>&lt;input type="color" id="szin"&gt;</code></td>
+<td><code>szin.value</code> → "#ff0000"</td>
+</tr>
+<tr class="even">
+<td>Date</td>
+<td><code>&lt;input type="date" id="datum"&gt;</code></td>
+<td><code>datum.value</code> → "2026-11-16"</td>
+</tr>
+<tr class="odd">
+<td>Button</td>
+<td><code>&lt;button onclick="fv()"&gt;OK&lt;/button&gt;</code></td>
+<td>runs <code>fv()</code></td>
+</tr>
+</tbody>
+</table>
+
+### SET values from JS
+
+```js
+nev.value = "Peti";                 // write into a text input
+hirlevel.checked = true;            // tick a checkbox
+varos.value = "bp";                 // pick a dropdown option
+gomb.disabled = true;               // grey out a button
+nev.focus();                        // put the cursor into the input
+ki.innerHTML = "<b>Kész!</b>";      // write HTML into a <p>/<div>
+ki.style.color = "red";             // change CSS from JS (dash-names become camelCase: background-color -> backgroundColor)
+```
+
+### Full form example (read everything, show it)
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head><meta charset="UTF-8"><title>Űrlap</title></head>
+<body>
+
+  <label>Név: <input type="text" id="nev"></label><br>
+  <label>Kor: <input type="number" id="kor" value="18"></label><br>
+
+  Nem:
+  <label><input type="radio" name="nem" value="Férfi"> Férfi</label>
+  <label><input type="radio" name="nem" value="Nő"> Nő</label><br>
+
+  <label><input type="checkbox" id="hirlevel"> Kérek hírlevelet</label><br>
+
+  Város:
+  <select id="varos">
+    <option value="Budapest">Budapest</option>
+    <option value="Debrecen">Debrecen</option>
+    <option value="Pozsony">Pozsony</option>
+  </select><br>
+
+  <button onclick="kuld()">Küldés</button>
+  <p id="ki"></p>
+
+<script>
+function kuld() {
+  let nev = document.getElementById("nev").value;
+  let kor = Number(document.getElementById("kor").value);
+  let nemGomb = document.querySelector("input[name='nem']:checked");
+  let hirlevel = document.getElementById("hirlevel").checked;
+  let varos = document.getElementById("varos").value;
+
+  // checks first
+  if (nev == "") {
+    document.getElementById("ki").innerHTML = "Add meg a neved!";
+    return;                       // STOP the function here
+  }
+  if (nemGomb == null) {
+    document.getElementById("ki").innerHTML = "Válassz nemet!";
+    return;
+  }
+
+  let szoveg = nev + ", " + kor + " éves, " + nemGomb.value + ", " + varos;
+  if (hirlevel) {
+    szoveg = szoveg + ", kér hírlevelet";
+  }
+  document.getElementById("ki").innerHTML = szoveg;
+}
+</script>
+</body>
+</html>
+```
+
+## 8. ⭐ Multiplication table (Szorzótábla)
+
+### Step 1 – What is an HTML table?
+
+```html
+<table>
+  <tr>              <!-- tr = table ROW -->
+    <td>1</td>      <!-- td = table CELL (data) -->
+    <td>2</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>4</td>
+  </tr>
+</table>
+```
+
+> A table = **rows** (`tr`), and every row has **cells** (`td`). So we need: a loop for the rows, and INSIDE it a loop for the cells.
+
+### Step 2 – How a for loop reads
+
+```css
+for (let i = 1; i <= 10; i++) {
+  // this runs 10 times: i = 1, 2, 3, ... 10
+}
+//   let i = 1   -> start at 1
+//   i <= 10     -> keep going while i is at most 10
+//   i++         -> add 1 after every round
+```
+
+### Step 3 – Loop inside a loop
+
+> **i** = which ROW we are in. **j** = which COLUMN we are in. The cell value = **i \* j**.  
+> For every 1 round of i, j runs ALL the way 1 → 10. So: row 1 → cells 1..10, row 2 → cells 1..10, ...
+
+| i (row) | j goes  | cells written |
+|---------|---------|---------------|
+| 1       | 1, 2, 3 | 1 2 3         |
+| 2       | 1, 2, 3 | 2 4 6         |
+| 3       | 1, 2, 3 | 3 6 9         |
+
+### VERSION A – document.write (the way your class did it)
+
+**Full working file**
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Szorzótábla</title>
+<style>
+  body { font-family: Arial; text-align: center; }
+
+  table {
+    border-collapse: collapse;   /* single lines between cells */
+    margin: 20px auto;           /* center the table */
+  }
+  td {
+    width: 36px;
+    height: 36px;
+    border: 1px solid #cccccc;
+    text-align: center;
+  }
+  tr:hover td {                  /* ROW under the mouse lights up */
+    background-color: #cfe0ff;
+  }
+  td:hover {                     /* the CELL under the mouse is orange */
+    background-color: #ffcc66 !important;
+  }
+</style>
+</head>
+<body>
+
+<h1>Szorzótábla</h1>
+
+<script>
+let meret = 10;                         // size: 10 x 10
+
+document.write("<table>");              // open table
+for (let i = 1; i <= meret; i++) {      // ROWS
+  document.write("<tr>");               //   open row
+  for (let j = 1; j <= meret; j++) {    //   CELLS in this row
+    document.write("<td>" + (i * j) + "</td>");
+  }
+  document.write("</tr>");              //   close row
+}
+document.write("</table>");             // close table
+</script>
+
+</body>
+</html>
+```
+
+> ⚠️ `document.write` only works WHILE the page is loading (script inside body). If you call it later (e.g. from a button), it **deletes the whole page**. For a button, use VERSION B.
+
+> ⚠️ **Brackets!** `"<td>" + (i * j) + "</td>"`. Without the ( ) around i \* j it can go wrong with + signs, so always put them.
+
+### VERSION B – button + size input + innerHTML (safer, more flexible)
+
+> Instead of writing straight onto the page, we **build one long text** (string) with the whole table, then put it into a div in one go.
+
+**Full working file**
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Szorzótábla gombbal</title>
+<style>
+  body { font-family: Arial; text-align: center; }
+  table { border-collapse: collapse; margin: 20px auto; }
+  td { width: 36px; height: 36px; border: 1px solid #ccc; text-align: center; }
+  tr:hover td { background-color: #cfe0ff; }
+  .fejlec { background-color: #ffe08a; font-weight: bold; }   /* first row + first column */
+</style>
+</head>
+<body>
+
+<h1>Szorzótábla</h1>
+Méret: <input type="number" id="meret" value="10" min="1" max="20">
+<button onclick="general()">Mehet</button>
+<div id="tabla"></div>
+
+<script>
+function general() {
+  let meret = Number(document.getElementById("meret").value);
+  let html = "<table>";                     // start the text
+
+  for (let i = 1; i <= meret; i++) {
+    html = html + "<tr>";
+    for (let j = 1; j <= meret; j++) {
+      if (i == 1 || j == 1) {                // first row OR first column -> special color
+        html = html + "<td class='fejlec'>" + (i * j) + "</td>";
+      } else {
+        html = html + "<td>" + (i * j) + "</td>";
+      }
+    }
+    html = html + "</tr>";
+  }
+
+  html = html + "</table>";
+  document.getElementById("tabla").innerHTML = html;   // put it on the page in ONE go
+}
+
+general();   // draw it once when the page opens
+</script>
+</body>
+</html>
+```
+
+### Extra: highlight the COLUMN too (the trick from your class file)
+
+> CSS can light up a row easily (`tr:hover td`), but there is no "column" tag. Trick: give every cell a class with its column number (`oszlop-1`, `oszlop-2`, ...). Then a CSS rule for EACH column: "if the table has a hovered cell of column 3, color all cells of column 3". A loop writes those rules for you.
+
+```html
+<script>
+let meret = 15;
+
+// 1) write one pair of CSS rules for EACH column
+document.write("<style>");
+for (let j = 1; j <= meret; j++) {
+  document.write(
+    "table:has(.oszlop-" + j + ":hover) .oszlop-" + j + " { background-color: #cfe0ff; }" +       // whole column blue
+    "table:has(.oszlop-" + j + ":hover) .oszlop-" + j + ":hover { background-color: #ffcc66; }"    // hovered cell orange
+  );
+}
+document.write("</style>");
+
+// 2) the table, every cell gets its column class
+document.write("<table>");
+for (let i = 1; i <= meret; i++) {
+  document.write("<tr>");
+  for (let j = 1; j <= meret; j++) {
+    document.write("<td class='oszlop-" + j + "'>" + (i * j) + "</td>");
+  }
+  document.write("</tr>");
+}
+document.write("</table>");
+</script>
+```
+
+### Common variations a teacher might ask
+
+```js
+// color EVEN results:  (% = remainder; even number -> remainder 0 when divided by 2)
+if ((i * j) % 2 == 0) { html += "<td style='background:lightgreen'>" + (i*j) + "</td>"; }
+
+// color the DIAGONAL (square numbers 1, 4, 9, ...):
+if (i == j) { ... }
+
+// only rows 1..5 but columns 1..10:
+for (let i = 1; i <= 5; i++) { for (let j = 1; j <= 10; j++) { ... } }
+
+// header with th instead of td (bold automatically):
+html += "<th>" + j + "</th>";
+
+// html += "x"   is the same as   html = html + "x"
+```
+
+## 9. ⭐ Guessing game (Számkitaláló) – with the ruler
+
+> **How the game works in plain words:**  
+> 1. The computer secretly picks a random number from 1 to 100 → `titok`  
+> 2. You guess → `tipp`  
+> 3. If guess \< secret → "Nagyobb" (the secret is bigger). If guess \> secret → "Kisebb". If equal → "Talált!"  
+> 4. Count the guesses → `db`  
+> 5. Button "Új játék" → pick a new secret and set the counter back to 0
+
+### Random number – the magic line
+
+```js
+Math.floor(Math.random() * 100) + 1     // 1 .. 100
+
+// Math.random()        -> 0 .. 0.9999 (random decimal)
+// * 100                -> 0 .. 99.99
+// Math.floor(...)      -> 0 .. 99   (cut off decimals)
+// + 1                  -> 1 .. 100
+
+// general: random between 1 and N:      Math.floor(Math.random() * N) + 1
+// between MIN and MAX:                  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN
+```
+
+**Full working file – game + ruler + box in the middle**
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Számkitaláló</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100vh;               /* full screen */
+    display: flex;               /* center the box... */
+    justify-content: center;     /* ...left-right */
+    align-items: center;         /* ...up-down */
+    background-color: #dfe6f5;
+  }
+  .doboz {
+    position: relative;          /* frame for #mutato */
+    width: 560px;
+    height: 360px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;          /* center text/inputs/buttons */
+  }
+  .vonalzo {
+    display: block;
+    width: 500px;                /* 500px -> 5px per number */
+    height: 60px;
+    margin: 15px auto;
+    cursor: crosshair;
+  }
+  #mutato {                      /* number at the BOTTOM MIDDLE of the box */
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 30px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+
+<div class="doboz">
+  <h2>Számkitaláló (1-100)</h2>
+
+  <input type="number" id="tipp" min="1" max="100">
+  <button onclick="tippel()">Tippel</button>
+  <button onclick="indit()">Új játék</button>
+
+  <p id="valasz">Tippelj!</p>
+  <p id="szamlalo">Tippek: 0</p>
+
+  <img src="vonalzo.png" class="vonalzo" onmousemove="mozog(event)" onclick="kattint()">
+
+  <div id="mutato">-</div>
+</div>
+
+<script>
+// ---------- VARIABLES (outside functions, so every function can see them) ----------
+let titok;          // the secret number
+let db;             // how many guesses so far
+let aktualis = 1;   // number under the mouse on the ruler
+
+// ---------- NEW GAME ----------
+function indit() {
+  titok = Math.floor(Math.random() * 100) + 1;          // 1..100
+  db = 0;
+  document.getElementById("valasz").innerHTML = "Új játék! Tippelj!";
+  document.getElementById("szamlalo").innerHTML = "Tippek: 0";
+  document.getElementById("tipp").value = "";
+}
+
+// ---------- ONE GUESS ----------
+function tippel() {
+  let t = Number(document.getElementById("tipp").value);   // read + make it a number
+
+  if (t < 1 || t > 100) {                                   // bad input -> stop
+    document.getElementById("valasz").innerHTML = "1 és 100 közötti számot adj meg!";
+    return;
+  }
+
+  db = db + 1;                                              // count it
+  document.getElementById("szamlalo").innerHTML = "Tippek: " + db;
+
+  if (t < titok) {
+    document.getElementById("valasz").innerHTML = t + " → Nagyobb!";
+  } else if (t > titok) {
+    document.getElementById("valasz").innerHTML = t + " → Kisebb!";
+  } else {
+    document.getElementById("valasz").innerHTML = "Talált! A szám " + titok + " volt. (" + db + " tipp)";
+  }
+}
+
+// ---------- RULER: mouse moves ----------
+function mozog(event) {
+  let szelesseg = event.target.clientWidth;                     // ruler width
+  aktualis = Math.floor(event.offsetX / szelesseg * 100) + 1;   // 1..100
+  if (aktualis > 100) aktualis = 100;
+  if (aktualis < 1) aktualis = 1;
+  document.getElementById("mutato").innerHTML = aktualis;       // show at bottom middle
+}
+
+// ---------- RULER: click = use as guess ----------
+function kattint() {
+  document.getElementById("tipp").value = aktualis;   // put it into the input
+  tippel();                                           // and guess with it
+}
+
+// ---------- start the first game when the page opens ----------
+indit();
+</script>
+</body>
+</html>
+```
+
+### Line by line – what to remember
+
+| Code                                   | Why                                                                                                         |
+|----------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `let titok; let db;` OUTSIDE functions | If you put them inside a function, they are forgotten when it ends, and the other functions can't see them. |
+| `Number(...value)`                     | Otherwise "5" is text, and comparisons can act weird.                                                       |
+| `return;`                              | Stops the function immediately (bad input → don't count it).                                                |
+| `if / else if / else`                  | Exactly ONE of the three answers runs.                                                                      |
+| `db = db + 1;` (or `db++`)             | Counter +1.                                                                                                 |
+| `kattint()` calls `tippel()`           | A function can call another function, so you don't write the checking twice.                                |
+| `indit();` at the end                  | Without it there is no secret number until you press "Új játék".                                            |
+
+### Extras (if the task asks for them)
+
+```js
+// ---- + and - keys change the guess by 1 (like in your class file) ----
+document.onkeydown = function(event) {
+  let mezo = document.getElementById("tipp");
+  if (event.key == "+") { mezo.value = Number(mezo.value) + 1; event.preventDefault(); }
+  if (event.key == "-") { mezo.value = Number(mezo.value) - 1; event.preventDefault(); }
+  // preventDefault() = don't actually type the + or - character into the field
+};
+
+// ---- ENTER key in the input = guess ----
+// HTML: <input type="number" id="tipp" onkeyup="if (event.key == 'Enter') tippel()">
+
+// ---- max 7 guesses ----
+if (db >= 7 && t != titok) {
+  document.getElementById("valasz").innerHTML = "Vesztettél! A szám " + titok + " volt.";
+}
+
+// ---- list of earlier guesses ----
+// HTML: <p id="lista"></p>
+document.getElementById("lista").innerHTML += t + ", ";     // += adds to the end
+
+// ---- disable the button after winning ----
+// HTML: <button id="tippGomb" onclick="tippel()">Tippel</button>
+document.getElementById("tippGomb").disabled = true;        // in the "Talált" part
+document.getElementById("tippGomb").disabled = false;       // in indit()
+```
+
+## 10. ⭐ Currency exchange (Pénzváltó)
+
+> **How it works in plain words:**  
+> 1. Read everything: name, amount, FROM currency (radio), TO currency (radio), discount (checkbox), fee (select)  
+> 2. Check for mistakes: empty name? amount ≤ 0? no currency picked? → show error, STOP  
+> 3. Convert **FROM → forint → TO** (every rate is "how many forints is 1 unit")  
+> 4. Add the fee, apply the discount if ticked  
+> 5. Show it with 2 decimals and a Hungarian comma
+
+### The formula explained with an example: 100 EUR → USD
+
+| Step                             | Code                              | Result     |
+|----------------------------------|-----------------------------------|------------|
+| EUR to forint (1 EUR = 363.6 Ft) | `100 * 363.6`                     | 36 360 Ft  |
+| forint to USD (1 USD = 323.1 Ft) | `36360 / 323.1`                   | 112.54 USD |
+| +2% fee                          | `112.54 * (1 + 2/100)` = `* 1.02` | 114.79     |
+| -5% discount                     | `114.79 * 0.95`                   | 109.05     |
+
+> 💡 **One line to memorize:** `atvaltott = osszeg * arfolyam(mirol) / arfolyam(mire);`  
+> "multiply by the FROM rate, divide by the TO rate". HUF has rate 1, so HUF → EUR is just `/ 363.6`.
+
+> 💡 **Percent trick:** +X% = `* (1 + X/100)`. −X% = `* (1 - X/100)`. So −5% = `* 0.95`, +2% = `* 1.02`. If your teacher says the fee is SUBTRACTED, use `(1 - dij / 100)`.
+
+**Full working file**
+
+```html
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Pénzváltó</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #dfe6f5;
+  }
+  .doboz {
+    width: 450px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .sor { margin: 10px 0; }        /* space between the lines of the form */
+  .hiba { color: red; font-weight: bold; }
+  .jo { color: green; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="doboz">
+  <h2>Pénzváltó</h2>
+
+  <div class="sor">Név: <input type="text" id="nev"></div>
+  <div class="sor">Összeg: <input type="number" id="osszeg" value="100"></div>
+
+  <div class="sor">
+    Miről:
+    <label><input type="radio" name="mirol" value="HUF"> HUF</label>
+    <label><input type="radio" name="mirol" value="EUR"> EUR</label>
+    <label><input type="radio" name="mirol" value="USD"> USD</label>
+  </div>
+
+  <div class="sor">
+    Mire:
+    <label><input type="radio" name="mire" value="HUF"> HUF</label>
+    <label><input type="radio" name="mire" value="EUR"> EUR</label>
+    <label><input type="radio" name="mire" value="USD"> USD</label>
+  </div>
+
+  <div class="sor"><label><input type="checkbox" id="kedvezmeny"> 5% kedvezmény</label></div>
+
+  <div class="sor">
+    Kezelési díj:
+    <select id="dij">
+      <option value="0">0%</option>
+      <option value="1">1%</option>
+      <option value="2">2%</option>
+    </select>
+  </div>
+
+  <button onclick="valt()">Átvált</button>
+  <p id="eredmeny"></p>
+</div>
+
+<script>
+// ---------- how many forints is 1 unit ----------
+function arfolyam(penznem) {
+  if (penznem == "EUR") return 363.6;
+  if (penznem == "USD") return 323.1;
+  return 1;                                   // HUF
+}
+
+// ---------- show an error ----------
+function hiba(szoveg) {
+  document.getElementById("eredmeny").innerHTML = "<span class='hiba'>" + szoveg + "</span>";
+}
+
+// ---------- the main function (button) ----------
+function valt() {
+  // 1) READ
+  let nev        = document.getElementById("nev").value;
+  let osszeg     = Number(document.getElementById("osszeg").value);
+  let mirolGomb  = document.querySelector("input[name='mirol']:checked");
+  let mireGomb   = document.querySelector("input[name='mire']:checked");
+  let kedvezmeny = document.getElementById("kedvezmeny").checked;
+  let dij        = Number(document.getElementById("dij").value);
+
+  // 2) CHECK (each one stops the function with return)
+  if (nev == "")                         { hiba("Add meg a neved!"); return; }
+  if (osszeg <= 0)                       { hiba("Az összeg legyen pozitív!"); return; }
+  if (mirolGomb == null || mireGomb == null) { hiba("Válaszd ki a pénznemeket!"); return; }
+
+  let mirol = mirolGomb.value;    // "HUF" / "EUR" / "USD"
+  let mire  = mireGomb.value;
+
+  // 3) CONVERT: from -> forint -> to
+  let atvaltott = osszeg * arfolyam(mirol) / arfolyam(mire);
+
+  // 4) FEE and DISCOUNT
+  atvaltott = atvaltott * (1 + dij / 100);
+  if (kedvezmeny) {
+    atvaltott = atvaltott * 0.95;
+  }
+
+  // 5) SHOW: 2 decimals, comma instead of dot
+  let szoveg = atvaltott.toFixed(2).replace(".", ",");
+  document.getElementById("eredmeny").innerHTML =
+    "<span class='jo'>" + nev + ": " + osszeg + " " + mirol + " = " + szoveg + " " + mire + "</span>";
+}
+</script>
+</body>
+</html>
+```
+
+> 💡 **Adding another currency** (e.g. GBP): 1) add a radio button with `value="GBP"` to BOTH groups, 2) add `if (penznem == "GBP") return 420;` to `arfolyam()`. Done.
+
+## 11. Math + JS quick reference
+
+```js
+// ----- numbers -----
+Number("12")            // 12      text -> number
+parseInt("12.7")        // 12      text -> whole number
+parseFloat("12.7")      // 12.7
+Math.floor(4.9)         // 4       round DOWN
+Math.ceil(4.1)          // 5       round UP
+Math.round(4.5)         // 5       normal rounding
+(3.14159).toFixed(2)    // "3.14"  2 decimals (gives TEXT)
+Math.max(3, 8)          // 8
+Math.min(3, 8)          // 3
+Math.abs(-5)            // 5
+Math.sqrt(16)           // 4
+Math.pow(2, 3)          // 8       (or 2 ** 3)
+10 % 3                  // 1       remainder -> even check: x % 2 == 0
+isNaN(Number("abc"))    // true    "is it NOT a number?"
+
+// ----- text -----
+"5" + "3"               // "53"   !!! text glued together
+5 + 3                   // 8
+"Szia " + nev           // gluing text and variables
+szoveg.length           // number of characters
+szoveg.toUpperCase()    // CAPITALS
+szoveg.replace(".", ",")// replace the first "." with ","
+
+// ----- compare -----
+==   equal          !=   not equal
+<  >  <=  >=
+&&   AND (both true)         ||   OR (at least one true)        !   NOT
+
+// ----- variables -----
+let x = 5;      // can change later
+const Y = 10;   // never changes
+x++;            // x = x + 1
+x += 5;         // x = x + 5
+
+// ----- if -----
+if (x > 10) {
+  ...
+} else if (x > 5) {
+  ...
+} else {
+  ...
+}
+
+// ----- loops -----
+for (let i = 1; i <= 10; i++) { ... }     // 1..10
+while (x < 100) { x = x * 2; }            // repeat while true
+
+// ----- function -----
+function osszead(a, b) {
+  return a + b;       // gives back a value
+}
+let e = osszead(2, 3);   // 5
+
+// ----- output -----
+alert("Hello");                                   // popup
+console.log(x);                                   // F12 console (for debugging)
+document.getElementById("ki").innerHTML = "...";  // on the page
+```
+
+## 12. "It doesn't work!" checklist
+
+| Symptom                                   | Fix                                                                                                                               |
+|-------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Nothing happens at all                    | F12 → Console. Read the red error and its line number.                                                                            |
+| "Cannot read properties of null"          | The **id is wrong** (typo, or Capital vs small letter), or the script is ABOVE the element. Put `<script>` at the bottom of body. |
+| "xyz is not defined"                      | Function name typo: `onclick="tippel()"` must match `function tippel()` exactly.                                                  |
+| 5 + 3 gives 53                            | You forgot `Number()` around an input value.                                                                                      |
+| Result is NaN                             | You did math with something that isn't a number (empty input, text).                                                              |
+| if always true                            | You wrote `=` (sets the value) instead of `==` (compares).                                                                        |
+| Whole page disappeared                    | `document.write` was called from a button. Use `innerHTML` instead.                                                               |
+| Image not shown                           | Filename / capital letters / folder. See section 4.                                                                               |
+| CSS does nothing                          | Missing **;** or **}**, wrong selector (`.` for class, `#` for id), or style.css not linked / not in the same folder.             |
+| Box not centered vertically               | `height: 100vh;` missing on body.                                                                                                 |
+| Absolute element flies to the page corner | The parent box needs `position: relative;`                                                                                        |
+| Radio buttons can all be selected         | They need the SAME `name="..."`                                                                                                   |
+| Missing ) or }                            | Every `(` `{` `"` must be closed. Count them.                                                                                     |
+
+Sok sikert a vizsgán! 🍀
