@@ -1,0 +1,721 @@
+# 📘 JavaScript Functions (Függvények)
+
+**Contents**
+
+1. [What is a function?](#1-what-is-a-function)
+2. [Function declaration – the basic form](#2-function-declaration--the-basic-form)
+3. [Calling a function](#3-calling-a-function)
+4. [Parameters and arguments](#4-parameters-and-arguments)
+5. [return – giving back a value](#5-return--giving-back-a-value)
+6. [return to STOP a function early](#6-return-to-stop-a-function-early)
+7. [Default parameter values](#7-default-parameter-values)
+8. [Scope – where variables live](#8-scope--where-variables-live)
+9. [Hoisting – calling before declaring](#9-hoisting--calling-before-declaring)
+10. [Function expression](#10-function-expression)
+11. [Arrow function](#11-arrow-function)
+12. [Declaration vs expression vs arrow](#12-declaration-vs-expression-vs-arrow)
+13. [Functions + HTML events](#13-functions--html-events)
+14. [Functions calling other functions](#14-functions-calling-other-functions)
+15. [Functions as values (callbacks)](#15-functions-as-values-callbacks)
+16. [Built-in functions you already use](#16-built-in-functions-you-already-use)
+17. [Exam-style examples](#17-exam-style-examples)
+18. [Common mistakes](#18-common-mistakes)
+19. [One-page summary](#19-one-page-summary)
+
+---
+
+## 1. What is a function?
+
+> **In plain words:** a function is a **named block of code** that you write **once** and can run **as many times as you want** by calling its name.
+
+Think of it like a recipe:
+- **Writing** the recipe = *declaring* the function (nothing gets cooked yet)
+- **Cooking** from the recipe = *calling* the function (now the code runs)
+- **Ingredients** you give it = *parameters / arguments*
+- **The finished dish** it gives back = *return value*
+
+Why use functions?
+- You don't have to copy the same code again and again
+- A button can run it (`onclick="tippel()"`)
+- The code is split into small, readable pieces
+
+---
+
+## 2. Function declaration – the basic form
+
+```js
+function koszon() {
+  alert("Szia!");
+}
+```
+
+Line by line:
+
+| Part | Meaning |
+|---|---|
+| `function` | keyword: "I am making a function" |
+| `koszon` | the **name** (you choose it) |
+| `()` | the **parameter list** (empty here = it needs no input) |
+| `{ ... }` | the **body**: the code that runs when it's called |
+
+> ⚠️ Declaring it does **NOT** run it. It only saves it. It runs when you **call** it.
+
+### Naming rules
+- Letters, numbers, `_` and `$` are allowed. It **can't start with a number**.
+- No spaces: `tipp ellenorzes` ❌ → `tippEllenorzes` ✅ (camelCase)
+- **Case-sensitive**: `Tippel` and `tippel` are two DIFFERENT functions.
+- Use a verb that says what it does: `szamol`, `indit`, `tippel`, `kiir`, `valt`.
+- Avoid accents in names (`számol`). They usually work, but they're easy to mistype.
+
+---
+
+## 3. Calling a function
+
+Write its name **plus brackets**:
+
+```js
+koszon();      // runs it -> "Szia!" popup
+koszon();      // runs it again
+```
+
+> ⚠️ The brackets `()` are what make it RUN.
+> `koszon` = the function itself (just a name, nothing happens)
+> `koszon()` = **run** the function
+
+---
+
+## 4. Parameters and arguments
+
+Parameters let you give the function **input**, so it can do slightly different things each time.
+
+```js
+function koszon(nev) {          // nev = PARAMETER (an empty box waiting for a value)
+  alert("Szia, " + nev + "!");
+}
+
+koszon("Peti");                 // "Peti" = ARGUMENT (the value put into the box)
+koszon("Anna");                 // -> "Szia, Anna!"
+```
+
+| Word | Where | Example |
+|---|---|---|
+| **Parameter** | in the **declaration**, the variable name | `function koszon(nev)` |
+| **Argument** | in the **call**, the actual value | `koszon("Peti")` |
+
+### More parameters: separate with commas
+
+```js
+function osszead(a, b) {
+  alert(a + b);
+}
+
+osszead(2, 3);    // a = 2, b = 3   -> 5
+osszead(10, 1);   // a = 10, b = 1  -> 11
+```
+
+> 💡 The **order** matters: the 1st argument goes into the 1st parameter, the 2nd into the 2nd, and so on.
+
+### What if I give too few or too many?
+
+```js
+osszead(2);         // b is undefined -> 2 + undefined = NaN
+osszead(2, 3, 99);  // 99 is simply ignored -> 5
+```
+
+---
+
+## 5. return – giving back a value
+
+`alert` only **shows** a result. `return` **gives the result back** to whoever called the function, so you can store it and use it.
+
+```js
+function osszead(a, b) {
+  return a + b;
+}
+
+let eredmeny = osszead(2, 3);    // eredmeny = 5
+alert(eredmeny);                 // 5
+alert(osszead(10, 20) * 2);      // 60 -> you can use the call like a number
+```
+
+> **In plain words:** `osszead(2, 3)` gets **replaced by** whatever the function returns. It's as if you had written `5` there.
+
+### Example from the currency exchange
+
+```js
+function arfolyam(penznem) {
+  if (penznem == "EUR") return 363.6;
+  if (penznem == "USD") return 323.1;
+  return 1;                         // HUF
+}
+
+let ft = 100 * arfolyam("EUR");     // 100 * 363.6 = 36360
+```
+
+### Without return you get `undefined`
+
+```js
+function rossz(a, b) {
+  a + b;                // calculated, but NOT returned
+}
+let x = rossz(2, 3);    // x = undefined  ❌
+```
+
+### Rules of return
+- A function can **return only ONE value**. To give back several, use an array or object: `return [a, b];`
+- After `return` the function **stops immediately**. The code below it does not run.
+
+```js
+function teszt() {
+  return 1;
+  alert("this NEVER runs");
+}
+```
+
+---
+
+## 6. return to STOP a function early
+
+`return;` with no value just **stops** the function. This is used for **input checks**:
+
+```js
+function tippel() {
+  let t = Number(document.getElementById("tipp").value);
+
+  if (t < 1 || t > 100) {
+    document.getElementById("valasz").innerHTML = "1 és 100 közötti számot adj meg!";
+    return;                 // STOP here, the rest doesn't run
+  }
+
+  // this part only runs if the input was OK
+  db = db + 1;
+  ...
+}
+```
+
+> 💡 Pattern: **check first, `return` if it's bad, do the real work after.** It saves you from big nested `if`s.
+
+---
+
+## 7. Default parameter values
+
+If an argument is missing, the parameter can get a default:
+
+```js
+function koszon(nev = "Ismeretlen") {
+  alert("Szia, " + nev + "!");
+}
+
+koszon("Peti");   // Szia, Peti!
+koszon();         // Szia, Ismeretlen!
+```
+
+---
+
+## 8. Scope – where variables live
+
+> **In plain words:** a variable made **inside** a function exists **only inside that function** and disappears when the function ends. A variable made **outside** every function can be seen **everywhere**.
+
+```js
+let db = 0;              // GLOBAL: every function can see and change it
+
+function tippel() {
+  let t = 5;             // LOCAL: only exists inside tippel()
+  db = db + 1;           // ✅ can use the global db
+}
+
+function kiir() {
+  alert(db);             // ✅ works
+  alert(t);              // ❌ ERROR: t is not defined (it belonged to tippel)
+}
+```
+
+### Why this matters in the guessing game
+
+```js
+// ✅ GOOD – titok is outside, so indit() and tippel() share it
+let titok;
+
+function indit()  { titok = Math.floor(Math.random() * 100) + 1; }
+function tippel() { if (t < titok) ... }
+```
+
+```js
+// ❌ BAD – titok is created INSIDE indit(), tippel() can't see it
+function indit()  { let titok = Math.floor(Math.random() * 100) + 1; }
+function tippel() { if (t < titok) ... }   // error / undefined
+```
+
+> 💡 Rule: if **two or more functions** need the same value (secret number, counter, current ruler number) → declare it **outside**, at the top of the script.
+
+### Same name inside and outside
+
+```js
+let x = 10;
+function f() {
+  let x = 99;     // a NEW local x, the global one is untouched
+  alert(x);       // 99
+}
+f();
+alert(x);         // 10
+```
+
+> ⚠️ Writing `let` again inside the function makes a NEW local variable. If you want to change the global one, **don't** write `let`: just `x = 99;`
+
+### Parameters are local too
+
+```js
+function duplaz(szam) {
+  szam = szam * 2;     // changes only the local copy
+  return szam;
+}
+let a = 5;
+duplaz(a);             // returns 10
+alert(a);              // still 5
+```
+
+---
+
+## 9. Hoisting – calling before declaring
+
+**Function declarations** are "lifted up" by JavaScript, so you can call them **before** the line where they're written:
+
+```js
+koszon();                 // ✅ works, even though it's declared below
+
+function koszon() {
+  alert("Szia!");
+}
+```
+
+This does **NOT** work with function expressions or arrow functions (see next sections):
+
+```js
+koszon();                         // ❌ ERROR: Cannot access 'koszon' before initialization
+const koszon = function () { alert("Szia!"); };
+```
+
+---
+
+## 10. Function expression
+
+You can also store a function **in a variable**:
+
+```js
+const koszon = function (nev) {
+  alert("Szia, " + nev);
+};                                  // ← semicolon, because it's a variable assignment
+
+koszon("Peti");
+```
+
+- The function itself has **no name** (an *anonymous function*). The variable gives it one.
+- It is **not hoisted**: you must declare it **before** you call it.
+- Use `const` so you don't accidentally overwrite it.
+
+---
+
+## 11. Arrow function
+
+A shorter way to write a function expression:
+
+```js
+// normal expression:
+const osszead = function (a, b) {
+  return a + b;
+};
+
+// arrow function – same thing:
+const osszead = (a, b) => {
+  return a + b;
+};
+
+// even shorter: one expression = automatic return, no { } and no "return"
+const osszead = (a, b) => a + b;
+```
+
+### Shortening rules
+
+| Situation | Write it like |
+|---|---|
+| No parameter | `() => alert("Szia")` |
+| One parameter (brackets optional) | `x => x * 2` or `(x) => x * 2` |
+| More parameters | `(a, b) => a + b` |
+| More lines of code | `(a, b) => { let c = a + b; return c; }` |
+
+> ⚠️ If you use `{ }`, you MUST write `return`, or it gives back `undefined`.
+> `(a, b) => { a + b }` ❌ → undefined
+> `(a, b) => a + b` ✅
+
+---
+
+## 12. Declaration vs expression vs arrow
+
+| | Declaration | Expression | Arrow |
+|---|---|---|---|
+| Looks like | `function f() {}` | `const f = function () {};` | `const f = () => {};` |
+| Hoisted (call before declaring)? | ✅ yes | ❌ no | ❌ no |
+| Can be used in `onclick="f()"` | ✅ | ✅ (if declared before the click) | ✅ (if declared before the click) |
+| Short one-liners | ❌ | ❌ | ✅ |
+| Exam recommendation | **use this by default** | ok | ok for short stuff |
+
+> 💡 For school tasks: **use `function name() { }`**. It always works, it's the easiest to read, and the order doesn't matter.
+
+---
+
+## 13. Functions + HTML events
+
+### Way 1 – In the HTML attribute (what your class uses)
+
+```html
+<button onclick="tippel()">Tippel</button>
+<input id="szoveg2" onkeyup="masol()">
+<img src="vonalzo.png" onmousemove="mozog(event)">
+
+<script>
+function tippel() { ... }
+function masol()  { ... }
+function mozog(event) {
+  alert(event.offsetX);    // event = info about the mouse/key (position, key name...)
+}
+</script>
+```
+
+> ⚠️ In HTML you **call** it: `onclick="tippel()"`, **with** brackets.
+> ⚠️ For mouse/key info, pass the word `event` as an argument: `onmousemove="mozog(event)"`. The function receives it as a parameter.
+
+### Way 2 – From JavaScript (onclick property)
+
+```js
+document.getElementById("gomb").onclick = tippel;        // NO brackets! (give the function, don't run it)
+document.getElementById("gomb").onclick = function () {  // or an anonymous function
+  alert("Klikk!");
+};
+```
+
+### Way 3 – addEventListener
+
+```js
+document.getElementById("gomb").addEventListener("click", tippel);   // NO brackets!
+
+document.getElementById("kep").addEventListener("mousemove", function (event) {
+  console.log(event.offsetX, event.offsetY);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key == "Enter") tippel();
+});
+```
+
+> ⚠️ **The most common bug:** `addEventListener("click", tippel())`. With `()` it runs **immediately** when the page loads, and gives its RESULT (undefined) to the button. Without `()` you hand over the function itself, so it runs **later, on click**.
+
+| Event name in HTML | Event name in addEventListener |
+|---|---|
+| `onclick` | `"click"` |
+| `onmousemove` | `"mousemove"` |
+| `onkeyup` | `"keyup"` |
+| `onchange` | `"change"` |
+
+(Drop the `on` in addEventListener.)
+
+---
+
+## 14. Functions calling other functions
+
+A function can call another function, so you don't write the same code twice:
+
+```js
+function tippel() {
+  // checks the guess ...
+}
+
+function kattint() {
+  document.getElementById("tipp").value = aktualis;  // put the ruler number in the input
+  tippel();                                          // reuse the guess logic
+}
+```
+
+Small helper functions keep the main one clean:
+
+```js
+function hiba(szoveg) {
+  document.getElementById("eredmeny").innerHTML = "<span class='hiba'>" + szoveg + "</span>";
+}
+
+function valt() {
+  if (nev == "")   { hiba("Add meg a neved!"); return; }
+  if (osszeg <= 0) { hiba("Az összeg legyen pozitív!"); return; }
+  ...
+}
+```
+
+### Running something at page load
+
+```js
+function indit() { ... }
+
+indit();     // called once at the end of the script -> runs when the page opens
+```
+
+---
+
+## 15. Functions as values (callbacks)
+
+In JavaScript a function is a **value**, like a number. You can store it, and you can **give it to another function**. A function you pass in like this is called a **callback**.
+
+```js
+function kiir(szoveg) {
+  alert(szoveg);
+}
+
+function ketszer(muvelet) {     // muvelet will be a function
+  muvelet("első");
+  muvelet("második");
+}
+
+ketszer(kiir);                  // pass the function (no brackets!)
+```
+
+Where you'll meet callbacks:
+
+```js
+setTimeout(function () { alert("2 másodperc letelt"); }, 2000);   // run once after 2000 ms
+
+let ora = setInterval(() => { console.log("tick"); }, 1000);      // run every 1000 ms
+clearInterval(ora);                                                // stop it
+
+[1, 2, 3].forEach(function (szam) { console.log(szam * 10); });   // 10, 20, 30
+
+document.querySelectorAll("td").forEach(td => td.style.color = "red");
+```
+
+---
+
+## 16. Built-in functions you already use
+
+These are functions too. Someone else declared them, and you just call them:
+
+| Call | Gives back |
+|---|---|
+| `alert("x")` | nothing (shows a popup) |
+| `prompt("Név?")` | the typed text |
+| `confirm("Biztos?")` | `true` / `false` |
+| `Number("12")` | `12` |
+| `parseInt("12.7")` | `12` |
+| `Math.random()` | random 0 … 0.999 |
+| `Math.floor(4.9)` | `4` |
+| `Math.round(4.5)` | `5` |
+| `isNaN(x)` | `true` if x is not a number |
+| `document.getElementById("id")` | the HTML element |
+| `console.log(x)` | nothing (prints to F12 console) |
+| `szam.toFixed(2)` | text with 2 decimals |
+| `szoveg.replace(".", ",")` | the new text |
+
+> 💡 Ones with a dot (`Math.floor`, `szam.toFixed`) are **methods**: functions that belong to something.
+
+---
+
+## 17. Exam-style examples
+
+### a) Is it even?
+
+```js
+function parosE(szam) {
+  return szam % 2 == 0;      // gives true or false
+}
+
+if (parosE(8)) alert("páros");
+```
+
+### b) Bigger of two numbers
+
+```js
+function nagyobb(a, b) {
+  if (a > b) {
+    return a;
+  } else {
+    return b;
+  }
+}
+alert(nagyobb(3, 7));   // 7
+```
+
+### c) Random number between min and max
+
+```js
+function veletlen(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+let titok = veletlen(1, 100);
+```
+
+### d) Sum from 1 to n (loop inside a function)
+
+```js
+function osszeg(n) {
+  let s = 0;
+  for (let i = 1; i <= n; i++) {
+    s = s + i;
+  }
+  return s;
+}
+alert(osszeg(10));   // 55
+```
+
+### e) Factorial
+
+```js
+function faktorialis(n) {
+  let f = 1;
+  for (let i = 2; i <= n; i++) {
+    f = f * i;
+  }
+  return f;
+}
+alert(faktorialis(5));   // 120
+```
+
+### f) Is it a prime number?
+
+```js
+function primE(n) {
+  if (n < 2) return false;
+  for (let i = 2; i < n; i++) {
+    if (n % i == 0) return false;   // found a divisor -> stop, not prime
+  }
+  return true;                      // no divisor found
+}
+```
+
+### g) Area of a rectangle, read from inputs, button click
+
+```html
+a: <input type="number" id="a">
+b: <input type="number" id="b">
+<button onclick="szamol()">Számol</button>
+<p id="ki"></p>
+
+<script>
+function terulet(a, b) {             // pure math, no HTML
+  return a * b;
+}
+
+function szamol() {                  // the button handler: read -> compute -> write
+  let a = Number(document.getElementById("a").value);
+  let b = Number(document.getElementById("b").value);
+
+  if (a <= 0 || b <= 0) {
+    document.getElementById("ki").innerHTML = "Pozitív számokat adj meg!";
+    return;
+  }
+
+  document.getElementById("ki").innerHTML = "Terület: " + terulet(a, b);
+}
+</script>
+```
+
+> 💡 Good structure: **one function for the math** (takes parameters, returns a value) + **one function for the button** (reads inputs, calls the math function, writes the result).
+
+### h) Celsius → Fahrenheit, three ways
+
+```js
+function cToF(c) { return c * 9 / 5 + 32; }          // declaration
+const cToF2 = function (c) { return c * 9 / 5 + 32; }; // expression
+const cToF3 = c => c * 9 / 5 + 32;                    // arrow
+
+alert(cToF(100));   // 212
+```
+
+### i) Counter with a global variable
+
+```html
+<button onclick="novel()">+1</button>
+<button onclick="nullaz()">Nulláz</button>
+<p id="ki">0</p>
+
+<script>
+let szamlalo = 0;                    // global, both functions use it
+
+function novel() {
+  szamlalo++;
+  document.getElementById("ki").innerHTML = szamlalo;
+}
+
+function nullaz() {
+  szamlalo = 0;
+  document.getElementById("ki").innerHTML = szamlalo;
+}
+</script>
+```
+
+---
+
+## 18. Common mistakes
+
+| Mistake | What happens | Fix |
+|---|---|---|
+| `function tippel { }` | syntax error | brackets are required: `function tippel() { }` |
+| `tippel;` | nothing runs | `tippel();` |
+| `onclick="tippel"` | nothing runs | `onclick="tippel()"` |
+| `addEventListener("click", tippel())` | runs at page load, not on click | `addEventListener("click", tippel)` |
+| No `return` | result is `undefined` | `return a + b;` |
+| Code after `return` | never runs | move it above the return |
+| `let` variable inside func, used in another func | "is not defined" | declare it outside, at the top |
+| `let titok = ...` inside `indit()` when `titok` is global | the global stays empty | drop `let`: `titok = ...` |
+| `Tippel()` vs `tippel()` | "is not defined" | same capitals everywhere |
+| Missing `}` | "Unexpected end of input" | count `{` and `}`, they must match |
+| `mozog()` for a mouse handler | `event` is undefined | `onmousemove="mozog(event)"` + `function mozog(event)` |
+| Calling an arrow/expression before its line | "Cannot access before initialization" | move the declaration up, or use `function` |
+| `"5" + "3"` inside function = `"53"` | inputs are text | `Number(...)` before math |
+
+---
+
+## 19. One-page summary
+
+```js
+// DECLARE (hoisted, use this by default)
+function nev(param1, param2) {
+  // code
+  return valami;          // optional: gives back a value AND stops the function
+}
+
+// CALL
+nev(arg1, arg2);
+let x = nev(arg1, arg2);   // store the returned value
+
+// EXPRESSION (not hoisted)
+const nev2 = function (a) { return a * 2; };
+
+// ARROW (not hoisted, short)
+const nev3 = a => a * 2;
+const nev4 = (a, b) => { let c = a + b; return c; };
+
+// DEFAULT VALUE
+function f(x = 10) { ... }
+
+// STOP EARLY
+if (hibas) { return; }
+
+// SCOPE
+let globalis = 0;          // outside -> everyone sees it
+function g() {
+  let helyi = 1;           // inside -> only g() sees it
+}
+
+// EVENTS
+// <button onclick="f()">          <- HTML: WITH brackets
+// gomb.onclick = f;               <- JS: WITHOUT brackets
+// gomb.addEventListener("click", f);
+// <img onmousemove="m(event)">    function m(event) { event.offsetX }
+
+// CALLBACK
+setTimeout(() => alert("kész"), 1000);
+```
+
+**Remember:**
+1. `function` + name + `()` + `{ }`
+2. Declaring ≠ running. **`()` runs it.**
+3. Parameters = input, `return` = output.
+4. `return` stops the function.
+5. Shared values go **outside** the functions.
+6. In HTML **with** `()`, in `addEventListener` **without** `()`.
